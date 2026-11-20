@@ -31,6 +31,25 @@ def test_estructura_y_rangos():
     assert (df["precio_venta"] > 0).all()
 
 
+def test_validacion_nulos():
+    df = generate_car_sales_data(num_records=15000, random_state=42, output_path=None)
+    # Ninguna columna debe contener valores nulos en el dataset limpio
+    conteo_nulos = df.isnull().sum()
+    assert conteo_nulos.sum() == 0, f"Se encontraron valores nulos: {conteo_nulos.to_dict()}"
+
+
+def test_validacion_rangos_y_tipos():
+    df = generate_car_sales_data(num_records=15000, random_state=42, output_path=None)
+    # Rangos lógicos del negocio
+    assert df["precio_lista"].min() > 0
+    assert (df["precio_venta"] <= df["precio_lista"] * 1.5).all()
+    # Tipos de datos correctos
+    assert pd.api.types.is_numeric_dtype(df["kilometraje"])
+    assert pd.api.types.is_numeric_dtype(df["precio_venta"])
+    assert pd.api.types.is_object_dtype(df["marca"]) or pd.api.types.is_string_dtype(df["marca"])
+
+
+
 def test_num_registros_fuera_de_rango():
     with pytest.raises(ValueError):
         generate_car_sales_data(num_records=100, output_path=None)

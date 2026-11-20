@@ -53,6 +53,14 @@ registro:
 inferencia:
   tamano_lote: 100                   # vehículos que se valoran en cada ejecución diaria
   carpeta_salida: data/predicciones  # aquí queda prediccion_<fecha>.csv (no se versiona)
+  carpeta_lotes: data/lotes          # aquí se guardan las copias de los lotes puntuados para monitoreo de drift
+  nivel_drift: 0.0                   # nivel de drift emulado: de 0.0 a 1.0 (ej. 0.0, 0.3 o 0.6)
+
+drift:
+  carpeta_reportes_features: reports/drift_features  # reportes de Evidently (HTML y JSON)
+  carpeta_reportes_target: reports/drift_target      # reportes de drift de variable objetivo
+  umbral_fraccion_drift: 0.3                         # alerta si la fracción de variables con drift supera este umbral (30 %)
+  umbral_p_valor: 0.05                               # significancia estadística para pruebas de drift
 
 despliegue:
   cron_inferencia: "0 6 * * *"       # todos los días a las 06:00
